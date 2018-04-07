@@ -127,17 +127,29 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void transactionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transactionsActionPerformed
         this.dispose();
-        new Transactions().setVisible(true);
+        try {
+            new Transactions().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_transactionsActionPerformed
 
     private void customersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customersActionPerformed
         this.dispose();
-        new Customers().setVisible(true);
+        try {
+            new Customers().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_customersActionPerformed
 
     private void employeesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeesActionPerformed
         this.dispose();
-        new Employees().setVisible(true);
+        try {
+            new Employees().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_employeesActionPerformed
 
     private void usersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersActionPerformed

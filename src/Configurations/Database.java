@@ -19,7 +19,7 @@ public class Database {
       }catch (ClassNotFoundException | IllegalAccessException | InstantiationException e){
           System.out.println(e);
       }
-      System.out.println("Database Connection Success");
+//      System.out.println("Database Connection Success");
       return s;
       
   }  

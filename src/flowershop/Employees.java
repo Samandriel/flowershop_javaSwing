@@ -5,6 +5,16 @@
  */
 package flowershop;
 
+import Model.EmployeeModel;
+import java.awt.Image;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author harri
@@ -14,7 +24,23 @@ public class Employees extends javax.swing.JFrame {
     /**
      * Creates new form Flowers
      */
-    public Employees() {
+    EmployeeModel data;
+    EmployeeModel item;
+    List<EmployeeModel> items;
+    Object tableData[][];
+    public Employees() throws SQLException {
+        this.items  = new ArrayList<>();
+        this.data = new EmployeeModel();
+        this.items = data.fetch();
+        tableData = new Object[data.getCount()][5];
+        for (int i = 0; i < data.getCount(); i++) {
+            tableData[i][0] = this.items.get(i).getId();
+            tableData[i][1] = this.items.get(i).getName();
+            tableData[i][2] = this.items.get(i).getEmail();
+            tableData[i][3] = this.items.get(i).getPhone();
+            tableData[i][4] = this.items.get(i).getAge();
+        }        
+        
         initComponents();
     }
 
@@ -28,45 +54,28 @@ public class Employees extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         back = new javax.swing.JButton();
+        ItemImage = new javax.swing.JLabel();
+        editBtn = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
         create = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
+            tableData,
             new String [] {
-                "id", "Image", "Name", "Age", ""
+                "ID","Name","Email","Phone","Age"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Double.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        ));
+        jTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
-        }
+        jScrollPane1.setViewportView(jTable);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -79,7 +88,23 @@ public class Employees extends javax.swing.JFrame {
             }
         });
 
-        create.setText("Create new employee");
+        ItemImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        editBtn.setText("Edit");
+        editBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editBtnActionPerformed(evt);
+            }
+        });
+
+        deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBtnActionPerformed(evt);
+            }
+        });
+
+        create.setText("Create New Entry");
         create.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createActionPerformed(evt);
@@ -92,14 +117,21 @@ public class Employees extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(back)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(create))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 931, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(back)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(create))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 931, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(50, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 672, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(ItemImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(editBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,7 +139,14 @@ public class Employees extends javax.swing.JFrame {
                 .addGap(44, 44, 44)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ItemImage, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(editBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteBtn))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(back)
@@ -123,6 +162,51 @@ public class Employees extends javax.swing.JFrame {
         this.dispose();
         new MainMenu().setVisible(true);
     }//GEN-LAST:event_backActionPerformed
+
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
+        int row = jTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "Please select item");
+            setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        } else {
+            this.dispose();
+            new EmployeesForm().setVisible(true);
+        }
+    }//GEN-LAST:event_editBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        int row = jTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "Please select item");
+            setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        } else {
+            int id = (int) jTable.getValueAt(row, 0);
+            try {
+                this.data.delete(id);
+            } catch (SQLException ex) {
+                Logger.getLogger(Flowers.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                item = new EmployeeModel();
+            } catch (SQLException ex) {
+                Logger.getLogger(Flowers.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.dispose();
+            try {
+                new Employees().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(Flowers.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void jTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMouseClicked
+        int row = jTable.getSelectedRow();
+        byte[] item = (byte[]) items.get(row).getImage();
+        Image img = new ImageIcon(item).getImage().getScaledInstance(ItemImage.getWidth(), ItemImage.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon icon = new ImageIcon(img);
+        ItemImage.setIcon(icon);
+    }//GEN-LAST:event_jTableMouseClicked
 
     private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
         this.dispose();
@@ -162,16 +246,23 @@ public class Employees extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Employees().setVisible(true);
+                try {
+                    new Employees().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Employees.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel ItemImage;
     private javax.swing.JButton back;
     private javax.swing.JButton create;
+    private javax.swing.JButton deleteBtn;
+    private javax.swing.JButton editBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable;
     // End of variables declaration//GEN-END:variables
 }

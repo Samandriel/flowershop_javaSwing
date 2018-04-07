@@ -8,6 +8,7 @@ package flowershop;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import Model.TransactionModel;
+import java.awt.Frame;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -81,6 +82,12 @@ public class FlowerDetail extends javax.swing.JFrame {
         itemPriceVal = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         itemId = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        windowMenu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        backToMainMenu = new javax.swing.JMenuItem();
+        logOutMenu = new javax.swing.JMenuItem();
+        closeMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -129,14 +136,56 @@ public class FlowerDetail extends javax.swing.JFrame {
 
         itemId.setText("n/a");
 
+        windowMenu.setText("Window");
+
+        jMenuItem1.setText("Back to Flower Shop");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        windowMenu.add(jMenuItem1);
+
+        backToMainMenu.setText("Back to Main Menu");
+        backToMainMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backToMainMenuActionPerformed(evt);
+            }
+        });
+        windowMenu.add(backToMainMenu);
+
+        logOutMenu.setText("Logout");
+        windowMenu.add(logOutMenu);
+
+        closeMenu.setText("Close");
+        closeMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                closeMenuMouseClicked(evt);
+            }
+        });
+        closeMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeMenuActionPerformed(evt);
+            }
+        });
+        windowMenu.add(closeMenu);
+
+        jMenuBar1.add(windowMenu);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 931, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(112, 112, 112)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(itemImage)
-                .addGap(101, 101, 101)
+                .addGap(99, 99, 99)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addGroup(layout.createSequentialGroup()
@@ -161,16 +210,12 @@ public class FlowerDetail extends javax.swing.JFrame {
                                     .addComponent(purchaseAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addComponent(itemName))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 931, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
+                .addGap(106, 106, 106))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -202,7 +247,7 @@ public class FlowerDetail extends javax.swing.JFrame {
                             .addComponent(purchaseAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton1)))
                     .addComponent(itemImage))
-                .addGap(115, 115, 115))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         pack();
@@ -213,7 +258,12 @@ public class FlowerDetail extends javax.swing.JFrame {
         int amount = Integer.parseInt(purchaseAmount.getText());
         try {
             TransactionModel transaction = new TransactionModel();
-            
+            int inputAmount = Integer.parseInt(purchaseAmount.getText());
+
+//          int userId, int transactionTypeId, int mainFlowerId, int amount, double price
+            transaction.create(1, 1, id, inputAmount, price);
+            this.dispose();
+            new Flowers().setVisible(true);
             
         } catch (SQLException ex) {
             Logger.getLogger(FlowerDetail.class.getName()).log(Level.SEVERE, null, ex);
@@ -224,6 +274,29 @@ public class FlowerDetail extends javax.swing.JFrame {
     private void purchaseAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseAmountActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_purchaseAmountActionPerformed
+
+    private void backToMainMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToMainMenuActionPerformed
+        this.dispose();
+        new MainMenu().setVisible(true);
+    }//GEN-LAST:event_backToMainMenuActionPerformed
+
+    private void closeMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeMenuMouseClicked
+
+    }//GEN-LAST:event_closeMenuMouseClicked
+
+    private void closeMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeMenuActionPerformed
+
+        this.dispose();
+    }//GEN-LAST:event_closeMenuActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        this.dispose();
+        try {
+            new Flowers().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(FlowerDetail.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -265,6 +338,8 @@ public class FlowerDetail extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem backToMainMenu;
+    private javax.swing.JMenuItem closeMenu;
     private javax.swing.JLabel itemColorVal;
     private javax.swing.JLabel itemId;
     private javax.swing.JLabel itemImage;
@@ -280,7 +355,11 @@ public class FlowerDetail extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem logOutMenu;
     private javax.swing.JTextField purchaseAmount;
+    private javax.swing.JMenu windowMenu;
     // End of variables declaration//GEN-END:variables
 
 }

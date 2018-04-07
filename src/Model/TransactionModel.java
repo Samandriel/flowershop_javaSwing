@@ -31,10 +31,7 @@ public final class TransactionModel {
     
     Database db = new Database();
     Connection c = db.Connect();
-    Statement create;
-    Statement fetch;
-    Statement update;
-    Statement delete;
+    Statement q;
     ResultSet dbData;
     
     private List<TransactionModel> items;
@@ -104,10 +101,26 @@ public final class TransactionModel {
     public void setMainFlowerId(int mainFlowerId) {
         this.mainFlowerId = mainFlowerId;
     }    
+
+    public String getTransactionTypeName() {
+        return transactionTypeName;
+    }
+
+    public void setTransactionTypeName(String transactionTypeName) {
+        this.transactionTypeName = transactionTypeName;
+    }
+
+    public String getMainFlowerName() {
+        return mainFlowerName;
+    }
+
+    public void setMainFlowerName(String mainFlowerName) {
+        this.mainFlowerName = mainFlowerName;
+    }
     
     public List<TransactionModel> fetch() throws SQLException {
-        this.fetch = c.createStatement();
-        this.dbData  = fetch.executeQuery("Select *,transaction_types.id,main_flowers.id, flower_names.id  from transactions\n"
+        this.q = c.createStatement();
+        this.dbData  = q.executeQuery("Select *,transaction_types.id,main_flowers.id, flower_names.id  from transactions\n"
             + "inner join transaction_types\n"
             + "inner join main_flowers\n"
             + "inner join flower_names\n"
@@ -123,14 +136,14 @@ public final class TransactionModel {
         this.dbData.first();
         this.items  = new ArrayList<>();
         for (int i = 0; i < this.count; i++) {
-            this.id = this.dbData.getInt("id");
-            this.transactionTypeId = this.dbData.getInt("transaction_types.id");
+            this.id = this.dbData.getInt("transactions.id");
+            this.transactionTypeId = this.dbData.getInt("transaction_type_id");
             this.mainFlowerId = this.dbData.getInt("main_flower_id");
             this.amount = this.dbData.getInt("amount");
             this.price = this.dbData.getDouble("price");
             this.mainFlowerName = this.dbData.getString("flower_names.name");
             this.transactionTypeName = this.dbData.getString("transaction_types.name");
-            
+
             items.add(new TransactionModel(this.id, this.transactionTypeId, this.mainFlowerId, this.amount, this.price, this.mainFlowerName, this.transactionTypeName));
             
             this.dbData.next();
@@ -139,8 +152,8 @@ public final class TransactionModel {
     }
     
     public TransactionModel fetchById(int inputId) throws SQLException {
-        this.fetch = c.createStatement();
-        this.dbData  = fetch.executeQuery("Select *,transaction_types.id,main_flowers.id, flower_names.id  from transactions\n"
+        this.q = c.createStatement();
+        this.dbData  = q.executeQuery("Select *,transaction_types.id,main_flowers.id, flower_names.id  from transactions\n"
             + "inner join transaction_types\n"
             + "inner join main_flowers\n"
             + "inner join flower_names\n"
@@ -159,38 +172,50 @@ public final class TransactionModel {
         return item;
     }    
     
-    public void create(int id, int transactionTypeId, int mainFlowerId, int amount, double price) throws SQLException {
+    public void create(int userId, int transactionTypeId, int mainFlowerId, int amount, double price) throws SQLException {
+        FlowerModel flower = new FlowerModel();
+        flower.updateAmount(mainFlowerId, amount);
         
-        update.executeQuery("Insert into transactions (id, transaction_type_id, main_flower_id, amount, price) value(" 
-                + "," + id
-                + "," + transactionTypeId
+        this.q = c.createStatement();
+        q.execute("Insert into transactions (transaction_type_id, main_flower_id, amount, price) values (" 
+                + transactionTypeId
                 + "," + mainFlowerId
                 + "," + amount
                 + "," + price
                 + ");"
+                
         );
+        
+        switch (transactionTypeId) {
+            case 1:
+                CustomerTransactionModel ct = new CustomerTransactionModel();
+                ct.create(transactionTypeId, userId);
+                break;
+            case 2:
+                EmployeeTransactionModel et = new EmployeeTransactionModel();
+                et.create(transactionTypeId, userId);
+                break;
+            default:
+                throw new AssertionError();
+        }
     }    
     
     public void update(int id, int transactionTypeId, int mainFlowerId, int amount, double price) throws SQLException {
-        
-        update.executeUpdate("Update from transactions set" 
-                + "id=" + id
+        this.q = c.createStatement();
+        q.executeUpdate("Update transactions set" 
                 + "transaction_type_id=" + transactionTypeId
                 + "main_flower_id=" + mainFlowerId
                 + "amount=" + amount
                 + "price=" + price
-                + ";"
+                + "where id=" + id + ";"
         );
     }    
 
     public void delete(int id) throws SQLException {
-        delete.executeUpdate("Delete from transactions where id=" + id + ";");
+        this.q = c.createStatement();
+        q.executeUpdate("Delete from transactions where id=" + id + ";");
     }
     
-    public static void main(String[] args) throws SQLException {
-        TransactionModel transaction = new TransactionModel();
-        transaction.fetch();
-    }
 
 
 }

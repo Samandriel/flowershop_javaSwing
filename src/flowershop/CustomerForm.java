@@ -5,10 +5,9 @@
  */
 package flowershop;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import javax.swing.JFileChooser;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -138,12 +137,20 @@ public class CustomerForm extends javax.swing.JFrame {
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         this.dispose();
-        new Customers().setVisible(true);
+        try {
+            new Customers().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_backActionPerformed
 
     private void submit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit1ActionPerformed
         this.dispose();
-        new Customers().setVisible(true);
+        try {
+            new Customers().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_submit1ActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed

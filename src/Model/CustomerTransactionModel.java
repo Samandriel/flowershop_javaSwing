@@ -25,7 +25,7 @@ public final class CustomerTransactionModel {
     
     Database db = new Database();
     Connection c = db.Connect();
-    Statement create;
+    Statement q;
     Statement fetch;
     Statement update;
     Statement delete;
@@ -83,9 +83,9 @@ public final class CustomerTransactionModel {
       
     
     public void create(int transactionId,int customerId) throws SQLException {
-        
-        update.executeQuery("Insert into customer_transactions (transaction_id, customer_id) value(" 
-                + "," + transactionId
+        this.q = c.createStatement();
+        q.execute("Insert into customer_transactions (transaction_id, customer_id) value(" 
+                + transactionId
                 + "," + customerId
                 + ");"
         );

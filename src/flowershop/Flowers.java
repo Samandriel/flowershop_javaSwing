@@ -11,7 +11,6 @@ import Model.FlowerModel;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.TransferHandler;
 
 /**
  *
@@ -47,6 +46,8 @@ public class Flowers extends javax.swing.JFrame {
         ItemImage = new javax.swing.JLabel();
         editBtn = new javax.swing.JButton();
         deleteBtn = new javax.swing.JButton();
+        back = new javax.swing.JButton();
+        create = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuMenu = new javax.swing.JMenu();
         createMenu = new javax.swing.JMenuItem();
@@ -102,6 +103,20 @@ public class Flowers extends javax.swing.JFrame {
         deleteBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteBtnActionPerformed(evt);
+            }
+        });
+
+        back.setText("Back");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+
+        create.setText("Create New Entry");
+        create.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createActionPerformed(evt);
             }
         });
 
@@ -182,24 +197,29 @@ public class Flowers extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(60, 60, 60)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(viewBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(ItemImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(editBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE))))
+                        .addComponent(back)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(create))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(29, 29, 29)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(viewBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(ItemImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(editBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)))))
                 .addGap(0, 57, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addGap(22, 22, 22)
                 .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(ItemImage, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -209,8 +229,12 @@ public class Flowers extends javax.swing.JFrame {
                         .addComponent(editBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteBtn))
-                    .addComponent(jScrollPane1))
-                .addContainerGap(44, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(back)
+                    .addComponent(create))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -223,6 +247,7 @@ public class Flowers extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please select item");
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         } else {
+            this.dispose();
             flower = model.flower(row);
             new FlowerDetail(flower).setVisible(true);
         }
@@ -236,11 +261,6 @@ public class Flowers extends javax.swing.JFrame {
         ImageIcon icon = new ImageIcon(img);
         ItemImage.setIcon(icon);
     }//GEN-LAST:event_jTable1MouseClicked
-
-    private void createMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createMenuActionPerformed
-        this.dispose();
-        new FlowerForm().setVisible(true);
-    }//GEN-LAST:event_createMenuActionPerformed
 
     private void backToMainMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToMainMenuActionPerformed
         this.dispose();
@@ -266,31 +286,19 @@ public class Flowers extends javax.swing.JFrame {
         } else {
         int id = (int) jTable1.getValueAt(row, 0);
         try {
-            model.delete(id);
-        } catch (SQLException ex) {
-            Logger.getLogger(Flowers.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            model = new FlowerModel();
-        } catch (SQLException ex) {
-            Logger.getLogger(Flowers.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        this.dispose();
-        try {
-            new Flowers().setVisible(true);
+            int cofirmDialog = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Do you really want to delete this item?","Warning",cofirmDialog);
+            if(dialogResult == JOptionPane.YES_OPTION){
+                model.delete(id);
+                model = new FlowerModel();
+                this.dispose();
+                new Flowers().setVisible(true);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Flowers.class.getName()).log(Level.SEVERE, null, ex);
         }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
-
-    private void editMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuActionPerformed
-        this.editBtnActionPerformed(evt);
-    }//GEN-LAST:event_editMenuActionPerformed
-
-    private void createMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createMenuMouseClicked
-        
-    }//GEN-LAST:event_createMenuMouseClicked
 
     private void closeMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeMenuMouseClicked
         
@@ -305,13 +313,36 @@ public class Flowers extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTable1PropertyChange
 
+    private void deleteMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteMenuActionPerformed
+        this.deleteBtnActionPerformed(evt);
+    }//GEN-LAST:event_deleteMenuActionPerformed
+
+    private void editMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuActionPerformed
+        this.editBtnActionPerformed(evt);
+    }//GEN-LAST:event_editMenuActionPerformed
+
     private void viewMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewMenuActionPerformed
         this.viewBtnActionPerformed(evt);
     }//GEN-LAST:event_viewMenuActionPerformed
 
-    private void deleteMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteMenuActionPerformed
-        this.deleteBtnActionPerformed(evt);
-    }//GEN-LAST:event_deleteMenuActionPerformed
+    private void createMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createMenuActionPerformed
+        this.dispose();
+        new FlowerForm().setVisible(true);
+    }//GEN-LAST:event_createMenuActionPerformed
+
+    private void createMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createMenuMouseClicked
+
+    }//GEN-LAST:event_createMenuMouseClicked
+
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        this.dispose();
+        new MainMenu().setVisible(true);
+    }//GEN-LAST:event_backActionPerformed
+
+    private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
+        this.dispose();
+        new FlowerForm().setVisible(true);
+    }//GEN-LAST:event_createActionPerformed
 
     /**
      * @param args the command line arguments
@@ -355,8 +386,10 @@ public class Flowers extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel ItemImage;
+    private javax.swing.JButton back;
     private javax.swing.JMenuItem backToMainMenu;
     private javax.swing.JMenuItem closeMenu;
+    private javax.swing.JButton create;
     private javax.swing.JMenuItem createMenu;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JMenuItem deleteMenu;

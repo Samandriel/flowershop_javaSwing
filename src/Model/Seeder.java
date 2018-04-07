@@ -6,6 +6,9 @@
 package Model;
 
 import Configurations.Database;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -176,8 +179,87 @@ public final class Seeder {
         } else {
             System.out.println("Data already exist!!");
         }
-
     }
+
+
+    public static void employeeSeeder() throws SQLException, IOException {
+        Statement employeeSeeder = c.createStatement();
+        String filePath = "D:/Pictures/man.jpg";
+        File imageFile = new File(filePath);
+        byte[] imageFileByte = Files.readAllBytes(imageFile.toPath());
+        
+        if (tableEmpty("employees")) {
+//            Initalize Data
+            List<EmployeeModel> seeder = new ArrayList<>();
+            seeder.add(new EmployeeModel(0, "'John'", "'example1@email.com'", "'012345678'", 30, imageFileByte));
+     
+//            Initialize Query String
+            String qString = "Insert into employees (id, name, email, phone, age, image) values";
+            for (int i = 0; i < seeder.size(); i++) {
+                qString += "(" + seeder.get(i).getId() + ","
+                        + seeder.get(i).getName() + ","
+                        + seeder.get(i).getEmail() + ","
+                        + seeder.get(i).getPhone() + ","
+                        + seeder.get(i).getAge() + ","
+                        + "load_file('" + filePath + "'))";
+                
+                
+                if (i < seeder.size() - 1) {
+                    qString += ",";
+                } else {
+                    qString += ";";
+                }
+            };
+            
+//            Exexcute Query String
+            if (qString.isEmpty()) {
+                System.out.println("No seed data!!");
+            } else {
+                System.out.println(qString);
+                employeeSeeder.execute(qString);
+                System.out.println("Data is seeded successfully!");
+            }
+        } else {
+            System.out.println("Data already exist!!");
+        }
+    }
+
+    public static void customerSeeder() throws SQLException, IOException {
+        Statement customerSeeder = c.createStatement();
+        
+        if (tableEmpty("customers")) {
+//            Initalize Data
+            List<CustomerModel> seeder = new ArrayList<>();
+            seeder.add(new CustomerModel(0, "'Gena'", "'customer1@email.com'", "'0987654321'"));
+     
+//            Initialize Query String
+            String qString = "Insert into customers (id, name, email, phone) values";
+            for (int i = 0; i < seeder.size(); i++) {
+                qString += "(" + seeder.get(i).getId() + ","
+                        + seeder.get(i).getName() + ","
+                        + seeder.get(i).getEmail() + ","
+                        + seeder.get(i).getPhone() + ")";
+                
+                
+                if (i < seeder.size() - 1) {
+                    qString += ",";
+                } else {
+                    qString += ";";
+                }
+            };
+            
+//            Exexcute Query String
+            if (qString.isEmpty()) {
+                System.out.println("No seed data!!");
+            } else {
+                System.out.println(qString);
+                customerSeeder.execute(qString);
+                System.out.println("Data is seeded successfully!");
+            }
+        } else {
+            System.out.println("Data already exist!!");
+        }
+    }    
     
     public static boolean tableEmpty (String tableName) throws SQLException {
         Statement check = c.createStatement();
@@ -185,11 +267,13 @@ public final class Seeder {
         return !firstRow.first();
     }
     
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
         transactionTypeSeeder();
         flowerTypeSeeder();
         flowerColorSeeder();
         flowerNameSeeder();
+        employeeSeeder();
+        customerSeeder();
     }
 
 //    private int id;
