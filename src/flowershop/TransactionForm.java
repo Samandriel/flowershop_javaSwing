@@ -8,7 +8,12 @@ package flowershop;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import Model.TransactionModel;
+import Model.TransactionTypeModel;
+import Model.FlowerModel;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 /**
  *
  * @author harri
@@ -18,8 +23,65 @@ public class TransactionForm extends javax.swing.JFrame {
     /**
      * Creates new form CreateFlower
      */
-    public TransactionForm() {
+    TransactionTypeModel transactionTypedata;
+    List<TransactionTypeModel> transactionTypes;
+    String[] fieldTypeObject;
+    
+    FlowerModel flowerData;
+    List<FlowerModel> flowers;
+    String[] fieldFlowerObject;
+    int id = 0;
+    public TransactionForm() throws SQLException {
+        this.transactionTypedata = new TransactionTypeModel();
+        this.transactionTypes = new ArrayList<>();
+        this.transactionTypes = this.transactionTypedata.fetch();
+        
+        this.fieldTypeObject = new String[this.transactionTypedata.getCount()];
+        for (int i = 0; i < this.transactionTypedata.getCount(); i++) {
+            this.fieldTypeObject[i] = this.transactionTypes.get(i).getName();
+        }
+
+        this.flowerData = new FlowerModel();
+        this.flowers = new ArrayList<>();
+        this.flowers = this.flowerData.fetch();
+        
+        this.fieldFlowerObject = new String[this.flowerData.getCount()];
+        for (int i = 0; i < this.flowerData.getCount(); i++) {
+            this.fieldFlowerObject[i] = this.flowers.get(i).getName();
+        }        
         initComponents();
+        fieldType.setModel(new DefaultComboBoxModel<>(this.fieldTypeObject));
+        fieldFlower.setModel(new DefaultComboBoxModel<>(this.fieldFlowerObject));
+    }
+
+    TransactionForm(TransactionModel data) throws SQLException {
+        this.id = data.getId();
+        this.transactionTypedata = new TransactionTypeModel();
+        this.transactionTypes = new ArrayList<>();
+        this.transactionTypes = this.transactionTypedata.fetch();
+        this.fieldTypeObject = new String[this.transactionTypedata.getCount()];
+        for (int i = 0; i < this.transactionTypedata.getCount(); i++) {
+            this.fieldTypeObject[i] = this.transactionTypes.get(i).getName();
+        }        
+
+        this.flowerData = new FlowerModel();
+        this.flowers = new ArrayList<>();
+        this.flowers = this.flowerData.fetch();
+        
+        this.fieldFlowerObject = new String[this.flowerData.getCount()];
+        for (int i = 0; i < this.flowerData.getCount(); i++) {
+            this.fieldFlowerObject[i] = this.flowers.get(i).getName();
+        }
+        
+        initComponents();
+        fieldType.setModel(new DefaultComboBoxModel<>(this.fieldTypeObject));
+        fieldType.insertItemAt(data.getTransactionTypeName(), 0);
+        fieldType.setSelectedIndex(0);
+        fieldFlower.setModel(new DefaultComboBoxModel<>(this.fieldFlowerObject));
+        fieldFlower.insertItemAt(data.getMainFlowerName(), 0);
+        fieldFlower.setSelectedIndex(0);
+        fieldAmount.setText(Integer.toString(data.getAmount()));
+        fieldPrice.setText(Double.toString(data.getPrice()));        
     }
 
     /**
@@ -32,35 +94,38 @@ public class TransactionForm extends javax.swing.JFrame {
     private void initComponents() {
 
         uploadImage = new javax.swing.JFileChooser();
-        jTextField2 = new javax.swing.JTextField();
+        fieldPrice = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        fieldType = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        fieldAmount = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         back = new javax.swing.JButton();
         submit1 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        fieldFlower = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        fieldPrice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                fieldPriceActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel1.setText("Create a new Transaction");
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Transaction Form");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        fieldType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        fieldType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                fieldTypeActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Select Flower");
+        jLabel2.setText("Transaction Type");
 
         jLabel3.setText("Amount");
 
@@ -80,6 +145,15 @@ public class TransactionForm extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setText("Select Flower");
+
+        fieldFlower.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        fieldFlower.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldFlowerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -87,21 +161,24 @@ public class TransactionForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField1)
-                            .addComponent(jComboBox1, 0, 355, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(130, 130, 130)
                         .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fieldFlower, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel2)
+                                .addComponent(fieldPrice)
+                                .addComponent(fieldAmount)
+                                .addComponent(fieldType, 0, 355, Short.MAX_VALUE))
+                            .addComponent(jLabel4))))
                 .addContainerGap(57, Short.MAX_VALUE))
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,16 +188,20 @@ public class TransactionForm extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldFlower, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(156, 156, 156)
+                .addComponent(fieldPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(91, 91, 91)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -131,13 +212,9 @@ public class TransactionForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void fieldPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldPriceActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_fieldPriceActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         this.dispose();
@@ -149,13 +226,47 @@ public class TransactionForm extends javax.swing.JFrame {
     }//GEN-LAST:event_backActionPerformed
 
     private void submit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit1ActionPerformed
-        this.dispose();
-        try {
-            new Transactions().setVisible(true);
+        int transactionTypesId = 0;
+        int flowerId = 0;
+        for (int i = 0; i < this.transactionTypes.size(); i++) {
+            if (this.transactionTypes.get(i).getName() == fieldType.getSelectedItem().toString()) {
+                transactionTypesId = this.transactionTypes.get(i).getId();
+                break;
+            }
+        }
+
+        for (int i = 0; i < this.flowers.size(); i++) {
+            if (this.flowers.get(i).getName() == fieldFlower.getSelectedItem().toString()) {
+                flowerId = this.flowers.get(i).getId();
+                break;
+            }
+        }
+        
+        try {                                        
+            TransactionModel data = new TransactionModel();
+            if (this.id == 0) {
+                data.create(1, transactionTypesId, flowerId, Integer.parseInt(fieldAmount.getText()), Double.parseDouble(fieldPrice.getText()));
+            } else {
+                data.update(1, this.id, transactionTypesId, flowerId, Integer.parseInt(fieldAmount.getText()), Double.parseDouble(fieldPrice.getText()));
+            }
+            this.dispose();
+            try {
+                new Transactions().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(TransactionForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(TransactionForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_submit1ActionPerformed
+
+    private void fieldFlowerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldFlowerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldFlowerActionPerformed
+
+    private void fieldTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldTypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldTypeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -194,20 +305,26 @@ public class TransactionForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TransactionForm().setVisible(true);
+                try {
+                    new TransactionForm().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(TransactionForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton back;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JTextField fieldAmount;
+    private javax.swing.JComboBox<String> fieldFlower;
+    private javax.swing.JTextField fieldPrice;
+    private javax.swing.JComboBox<String> fieldType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JButton submit1;
     private javax.swing.JFileChooser uploadImage;
     // End of variables declaration//GEN-END:variables

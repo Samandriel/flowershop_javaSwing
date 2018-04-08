@@ -9,6 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import Model.FlowerModel;
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -22,11 +24,23 @@ public class Flowers extends javax.swing.JFrame {
      * Creates new form Flowers
      * @throws java.sql.SQLException
      */
-    String data[][];
-    
-    FlowerModel model = new FlowerModel();
-    Object flower[];
+    Object tableData[][];
+    List<FlowerModel> items;
+    FlowerModel data;
+    FlowerModel item;
     public Flowers() throws SQLException {
+        this.data = new FlowerModel();
+        this.items = new ArrayList<>();
+        this.items = data.fetch();
+        this.tableData = new Object[data.getCount()][6];
+        for (int i = 0; i < data.getCount(); i++) {
+            this.tableData[i][0] = this.items.get(i).getId();
+            this.tableData[i][1] = this.items.get(i).getType();
+            this.tableData[i][2] = this.items.get(i).getName();
+            this.tableData[i][3] = this.items.get(i).getColor();
+            this.tableData[i][4] = this.items.get(i).getStock();
+            this.tableData[i][5] = this.items.get(i).getPrice();
+        }
         initComponents();
     }
 
@@ -62,7 +76,7 @@ public class Flowers extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            model.getFlowers(),
+            this.tableData,
             new String [] {
                 "ID","Name","Type","Color","In Stock", "Price"
             }
@@ -81,7 +95,7 @@ public class Flowers extends javax.swing.JFrame {
 
         header.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         header.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        header.setText("Flowers");
+        header.setText("Flowershop");
 
         viewBtn.setText("View");
         viewBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -202,8 +216,8 @@ public class Flowers extends javax.swing.JFrame {
                         .addComponent(back)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(create))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, 912, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(29, 29, 29)
@@ -248,15 +262,15 @@ public class Flowers extends javax.swing.JFrame {
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         } else {
             this.dispose();
-            flower = model.flower(row);
-            new FlowerDetail(flower).setVisible(true);
+            this.item = this.items.get(row);
+            new FlowerDetail(this.item).setVisible(true);
         }
     }//GEN-LAST:event_viewBtnActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         int row = jTable1.getSelectedRow();
-        model.flower(row);
-        byte[] item = (byte[]) model.getImage();
+        this.item = this.items.get(row);
+        byte[] item = (byte[]) this.item.getImage();
         Image img = new ImageIcon(item).getImage().getScaledInstance(ItemImage.getWidth(), ItemImage.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon icon = new ImageIcon(img);
         ItemImage.setIcon(icon);
@@ -274,7 +288,11 @@ public class Flowers extends javax.swing.JFrame {
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         } else {
             this.dispose();
-            new FlowerForm().setVisible(true);
+            try {
+                new FlowerForm(this.items.get(row)).setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(Flowers.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_editBtnActionPerformed
 
@@ -289,8 +307,8 @@ public class Flowers extends javax.swing.JFrame {
             int cofirmDialog = JOptionPane.YES_NO_OPTION;
             int dialogResult = JOptionPane.showConfirmDialog(null, "Do you really want to delete this item?","Warning",cofirmDialog);
             if(dialogResult == JOptionPane.YES_OPTION){
-                model.delete(id);
-                model = new FlowerModel();
+                data.delete(id);
+                data = new FlowerModel();
                 this.dispose();
                 new Flowers().setVisible(true);
             }
@@ -327,22 +345,30 @@ public class Flowers extends javax.swing.JFrame {
 
     private void createMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createMenuActionPerformed
         this.dispose();
-        new FlowerForm().setVisible(true);
+        try {
+            new FlowerForm().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Flowers.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_createMenuActionPerformed
 
     private void createMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createMenuMouseClicked
 
     }//GEN-LAST:event_createMenuMouseClicked
 
+    private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
+        this.dispose();
+        try {
+            new FlowerForm().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Flowers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_createActionPerformed
+
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         this.dispose();
         new MainMenu().setVisible(true);
     }//GEN-LAST:event_backActionPerformed
-
-    private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
-        this.dispose();
-        new FlowerForm().setVisible(true);
-    }//GEN-LAST:event_createActionPerformed
 
     /**
      * @param args the command line arguments

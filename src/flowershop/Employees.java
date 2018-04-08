@@ -131,7 +131,7 @@ public class Employees extends javax.swing.JFrame {
                             .addComponent(ItemImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(editBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,7 +170,7 @@ public class Employees extends javax.swing.JFrame {
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         } else {
             this.dispose();
-            new EmployeesForm().setVisible(true);
+            new EmployeesForm(this.items.get(row)).setVisible(true);
         }
     }//GEN-LAST:event_editBtnActionPerformed
 

@@ -78,6 +78,7 @@ public final class CustomerTransactionModel {
             
             this.dbData.next();
         }
+        c.close();
         return items;
     }
       
@@ -89,6 +90,7 @@ public final class CustomerTransactionModel {
                 + "," + customerId
                 + ");"
         );
+        c.close();
     }    
     
     public void update(int transactionId,int customerId) throws SQLException {
@@ -98,10 +100,12 @@ public final class CustomerTransactionModel {
                 + "customer=" + customerId
                 + ";"
         );
+        c.close();
     }    
 
     public void delete(int id) throws SQLException {
         delete.executeUpdate("Delete from customer_transactions where id=" + id + ";");
+        c.close();
     }
 
 

@@ -17,9 +17,7 @@ import java.util.List;
  *
  * @author harri
  */
-
-
-public class FlowerNameModel {
+public class TransactionTypeModel {
     private int id;
     private String name;
 
@@ -28,19 +26,23 @@ public class FlowerNameModel {
     Statement q;
     ResultSet dbData;
     private int count;
-    List<FlowerNameModel> items;    
-
-    public FlowerNameModel() {
-    }
+    List<TransactionTypeModel> items;    
     
-    public FlowerNameModel(int id, String name) {
+    public TransactionTypeModel(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public List<FlowerNameModel> fetch() throws SQLException {
+    public TransactionTypeModel() {
+    }
+
+    TransactionTypeModel(int id, int transactionTypeId, int mainFlowerId, int amount, double price) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<TransactionTypeModel> fetch() throws SQLException {
         this.q = c.createStatement();
-        this.dbData  = q.executeQuery("Select * from flower_names;");        
+        this.dbData  = q.executeQuery("Select * from transaction_types;");        
         
         while(!this.dbData.isLast()) {
             this.dbData.next();
@@ -53,13 +55,12 @@ public class FlowerNameModel {
             this.id = this.dbData.getInt("id");
             this.name = this.dbData.getString("name");
 
-            items.add(new FlowerNameModel(this.id, this.name));
+            items.add(new TransactionTypeModel(this.id, this.name));
             
             this.dbData.next();
-        }
-        c.close();
+        }        
         return this.items;
-    }    
+    }        
     
     public int getId() {
         return id;
@@ -80,4 +81,6 @@ public class FlowerNameModel {
     public int getCount() {
         return count;
     }
+    
+        
 }

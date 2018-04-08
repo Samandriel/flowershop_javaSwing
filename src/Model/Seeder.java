@@ -30,9 +30,9 @@ public final class Seeder {
         
         if (tableEmpty("transaction_types")) {
 //            Initalize Data
-            List<TranactionTypeModel> seeder = new ArrayList<>();
-            seeder.add(new TranactionTypeModel(1, "'selling'"));
-            seeder.add(new TranactionTypeModel(2, "'purchasing'"));
+            List<TransactionTypeModel> seeder = new ArrayList<>();
+            seeder.add(new TransactionTypeModel(1, "'selling'"));
+            seeder.add(new TransactionTypeModel(2, "'purchasing'"));
 
 //            Initialize Query String
             String qString = "Insert into transaction_types (id, name) values";

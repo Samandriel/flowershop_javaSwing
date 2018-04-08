@@ -162,7 +162,7 @@ public class Customers extends javax.swing.JFrame {
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         } else {
             this.dispose();
-            new CustomerForm().setVisible(true);
+            new CustomerForm(this.items.get(row)).setVisible(true);
         }
     }//GEN-LAST:event_editBtnActionPerformed
 

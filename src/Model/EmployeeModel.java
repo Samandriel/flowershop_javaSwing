@@ -29,14 +29,11 @@ public final class EmployeeModel {
     
     Database db = new Database();
     Connection c = db.Connect();
-    Statement create;
-    Statement fetch;
-    Statement update;
-    Statement delete;
     ResultSet dbData;
     
     private List<EmployeeModel> items;
     private EmployeeModel item;
+    private Statement q;
     
     public EmployeeModel() throws SQLException {
     }
@@ -108,8 +105,8 @@ public final class EmployeeModel {
    
     
     public List<EmployeeModel> fetch() throws SQLException {
-        this.fetch = c.createStatement();
-        this.dbData  = fetch.executeQuery("Select * from employees;");        
+        this.q = c.createStatement();
+        this.dbData  = q.executeQuery("Select * from employees;");        
         
         while(!this.dbData.isLast()) {
             this.dbData.next();
@@ -129,12 +126,13 @@ public final class EmployeeModel {
             
             this.dbData.next();
         }
+        c.close();
         return items;
     }
     
     public EmployeeModel fetchById(int inputId) throws SQLException {
-        this.fetch = c.createStatement();
-        this.dbData  = fetch.executeQuery("Select * from employees where id=" + inputId + ";");        
+        this.q = c.createStatement();
+        this.dbData  = q.executeQuery("Select * from employees where id=" + inputId + ";");        
         
         item  = new EmployeeModel();
         item.id = this.dbData.getInt("id");
@@ -143,38 +141,59 @@ public final class EmployeeModel {
         item.phone = this.dbData.getString("phone");
         item.age = this.dbData.getInt("age");
         item.image = this.dbData.getBytes("image");
-
+        
+        c.close();
         return item;
     }    
     
-    public void create(int id, String name, String email, String phone, int age, byte[] image) throws SQLException {
-        
-        update.executeQuery("Insert into employees (id, name, email, phone, age, image) value(" 
-                + "," + id
-                + "," + name
-                + "," + email
-                + "," + phone
-                + "," + age
-                + "," + image
-                + ");"
-        );
+    public void create(String name, String email, String phone, int age, String image) throws SQLException {
+        this.q = c.createStatement();
+        String qString = "Insert into employees (name, email, phone, age, image) values(" 
+                + "'" + name
+                + "','" + email
+                + "','" + phone
+                + "'," + age
+                + ", load_file('" + image
+                + "'));";
+        q.execute(qString);
+        System.out.println(qString);
+        System.out.println("Created successfully");
+        c.close();
     }    
     
-    public void update(int id, String name, String email, String phone, int age, byte[] image) throws SQLException {
-        
-        update.executeUpdate("Update from employees set" 
-                + "id=" + id
-                + "name=" + name
-                + "email=" + email
-                + "phone=" + phone
-                + "age=" + age
-                + "image" + image
-                + ";"
-        );
+    public void update(int id, String name, String email, String phone, int age, String image) throws SQLException {
+        this.q = c.createStatement();
+        String qString;
+        if (image.contentEquals("")){
+            qString = "Update employees set" 
+                + " name='" + name
+                + "', email='" + email
+                + "', phone='" + phone
+                + "', age=" + age
+                + " where id=" + id + ";";             
+        } else {
+            qString = "Update employees set" 
+                + " name='" + name
+                + "', email='" + email
+                + "', phone='" + phone
+                + "', age='" + age
+                + "', image=load_file('" + image
+                + "') where id=" + id + ";";            
+        }
+       
+        q.execute(qString);
+        System.out.println(qString);
+        System.out.println("Updated successfully");
+        c.close();
     }    
 
     public void delete(int id) throws SQLException {
-        delete.executeUpdate("Delete from employees where id=" + id + ";");
+        this.q = c.createStatement();
+        String qString = "Delete from employees where id=" + id + ";";        
+        q.execute(qString);
+        System.out.println(qString);
+        System.out.println("Deleted successfully");
+        c.close();
     }
 
 

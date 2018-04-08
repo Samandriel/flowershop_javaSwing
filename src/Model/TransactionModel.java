@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,6 @@ import java.util.List;
  * @author harri
  */
 public final class TransactionModel {
-    private final String tableName = "transactions";
     private int id;
     private int transactionTypeId;
     private int mainFlowerId;
@@ -144,10 +142,12 @@ public final class TransactionModel {
             this.mainFlowerName = this.dbData.getString("flower_names.name");
             this.transactionTypeName = this.dbData.getString("transaction_types.name");
 
-            items.add(new TransactionModel(this.id, this.transactionTypeId, this.mainFlowerId, this.amount, this.price, this.mainFlowerName, this.transactionTypeName));
+            items.add(new TransactionModel(this.id, this.transactionTypeId, this.mainFlowerId, this.amount, this.price, this.transactionTypeName, this.mainFlowerName));
             
             this.dbData.next();
         }
+        
+        c.close();
         return items;
     }
     
@@ -168,7 +168,8 @@ public final class TransactionModel {
         item.mainFlowerId = this.dbData.getInt("main_flower_id");
         item.amount = this.dbData.getInt("amount");
         item.price = this.dbData.getDouble("price");
-
+        
+        c.close();
         return item;
     }    
     
@@ -198,22 +199,25 @@ public final class TransactionModel {
             default:
                 throw new AssertionError();
         }
+        c.close();
     }    
     
-    public void update(int id, int transactionTypeId, int mainFlowerId, int amount, double price) throws SQLException {
+    public void update(int userId, int id, int transactionTypeId, int mainFlowerId, int amount, double price) throws SQLException {
         this.q = c.createStatement();
         q.executeUpdate("Update transactions set" 
-                + "transaction_type_id=" + transactionTypeId
-                + "main_flower_id=" + mainFlowerId
-                + "amount=" + amount
-                + "price=" + price
-                + "where id=" + id + ";"
+                + " transaction_type_id=" + transactionTypeId
+                + ", main_flower_id=" + mainFlowerId
+                + ", amount=" + amount
+                + ", price=" + price
+                + " where id=" + id + ";"
         );
+        c.close();
     }    
 
     public void delete(int id) throws SQLException {
         this.q = c.createStatement();
         q.executeUpdate("Delete from transactions where id=" + id + ";");
+        c.close();
     }
     
 

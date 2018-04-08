@@ -35,6 +35,7 @@ public final class CustomerModel {
     
     private List<CustomerModel> items;
     private CustomerModel item;
+    private Statement q;
     
     public CustomerModel() throws SQLException {
     }
@@ -108,6 +109,7 @@ public final class CustomerModel {
             
             this.dbData.next();
         }
+        c.close();
         return items;
     }
     
@@ -124,30 +126,38 @@ public final class CustomerModel {
         return item;
     }    
     
-    public void create(int id, String name, String email, String phone) throws SQLException {
-        
-        update.executeQuery("Insert into customers (id, name, email, phone) value(" 
-                + "," + id
-                + "," + name
-                + "," + email
-                + "," + phone
-                + ");"
-        );
+    public void create(String name, String email, String phone) throws SQLException {
+        this.q = c.createStatement();
+        String qString = "Insert into customers (name, email, phone) value('" 
+                + name
+                + "','" + email
+                + "','" + phone
+                + "');";
+        q.execute(qString);
+        System.out.println(qString);
+        System.out.println("Created successfully");
+        c.close();
     }    
     
     public void update(int id, String name, String email, String phone) throws SQLException {
-        
-        update.executeUpdate("Update from customers set" 
-                + "id=" + id
-                + "name=" + name
-                + "email=" + email
-                + "phone=" + phone
-                + ";"
-        );
+        this.q = c.createStatement();
+        String qString =  "Update customers set" 
+                + " name='" + name
+                + "', email='" + email
+                + "', phone='" + phone
+                + "' where id=" + id + ";";
+        this.q.executeUpdate(qString);
+        System.out.println(qString);
+        System.out.println("Updated successfully");
+        c.close();
     }    
 
     public void delete(int id) throws SQLException {
-        delete.executeUpdate("Delete from customers where id=" + id + ";");
+        this.q = c.createStatement();
+        String qString = "Delete from customers where id=" + id + ";";
+        q.execute(qString);
+        System.out.println("Deleted successfully");
+        c.close();
     }
 
 

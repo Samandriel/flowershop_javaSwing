@@ -5,6 +5,7 @@
  */
 package flowershop;
 
+import Model.EmployeeModel;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -20,8 +21,18 @@ public class EmployeesForm extends javax.swing.JFrame {
     /**
      * Creates new form CreateFlower
      */
+    int id = 0;
     public EmployeesForm() {
         initComponents();
+    }
+
+    EmployeesForm(EmployeeModel data) {
+        this.id = data.getId();
+        initComponents();
+        fieldOfName.setText(data.getName());
+        fieldOfEmail.setText(data.getEmail());
+        fieldOfPhone.setText(data.getPhone());
+        fieldOfAge.setText(Integer.toString(data.getAge()));
     }
 
     /**
@@ -34,31 +45,34 @@ public class EmployeesForm extends javax.swing.JFrame {
     private void initComponents() {
 
         uploadImage = new javax.swing.JFileChooser();
-        jButton1 = new javax.swing.JButton();
+        fieldOfImage = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        fieldOfName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         fileLocation = new javax.swing.JLabel();
         back = new javax.swing.JButton();
         submit1 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        fieldOfPhone = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        fieldOfEmail = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        fieldOfAge = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Upload Image");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        fieldOfImage.setText("Upload Image");
+        fieldOfImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                fieldOfImageActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel1.setText("Create a new Employee");
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Employee Form");
 
         jLabel3.setText("Name");
-
-        fileLocation.setText("File location");
 
         back.setText("Back");
         back.addActionListener(new java.awt.event.ActionListener() {
@@ -74,7 +88,11 @@ public class EmployeesForm extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setText("Age");
+        jLabel6.setText("Phone Number");
+
+        jLabel4.setText("Email");
+
+        jLabel7.setText("Age");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -92,15 +110,19 @@ public class EmployeesForm extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jButton1)
-                                .addComponent(jLabel1)
-                                .addComponent(jTextField1)
+                                .addComponent(fieldOfImage)
+                                .addComponent(fieldOfName)
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(6, 6, 6)
-                                    .addComponent(fileLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)))
-                            .addComponent(jLabel6)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE))))
+                                    .addComponent(fileLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE))
+                                .addComponent(jLabel6)
+                                .addComponent(fieldOfPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+                                .addComponent(jLabel4)
+                                .addComponent(fieldOfEmail))
+                            .addComponent(jLabel7)
+                            .addComponent(fieldOfAge, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(57, Short.MAX_VALUE))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,27 +132,35 @@ public class EmployeesForm extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldOfName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldOfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldOfPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldOfAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(fieldOfImage)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fileLocation)
-                .addGap(150, 150, 150)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void fieldOfImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldOfImageActionPerformed
         int returnVal = uploadImage.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = uploadImage.getSelectedFile();
@@ -139,7 +169,7 @@ public class EmployeesForm extends javax.swing.JFrame {
         } else {
             System.out.println("File access cancelled by user.");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_fieldOfImageActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         this.dispose();
@@ -151,9 +181,22 @@ public class EmployeesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_backActionPerformed
 
     private void submit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit1ActionPerformed
-        this.dispose();
-        try {
-            new Employees().setVisible(true);
+        try {                                        
+            EmployeeModel data = new EmployeeModel();
+            String rawPath = fileLocation.getText();
+            String[] splitPath = rawPath.split("\\\\");
+            String imagePath = String.join("/", splitPath);
+            if (this.id == 0) {
+                data.create(fieldOfName.getText(), fieldOfEmail.getText(), fieldOfPhone.getText(), Integer.parseInt(fieldOfAge.getText()), imagePath);
+            } else {
+                data.update(this.id, fieldOfName.getText(), fieldOfEmail.getText(), fieldOfPhone.getText(), Integer.parseInt(fieldOfAge.getText()), imagePath);
+            }
+            this.dispose();
+            try {
+                new Employees().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(EmployeesForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(EmployeesForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -203,13 +246,17 @@ public class EmployeesForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton back;
+    private javax.swing.JTextField fieldOfAge;
+    private javax.swing.JTextField fieldOfEmail;
+    private javax.swing.JButton fieldOfImage;
+    private javax.swing.JTextField fieldOfName;
+    private javax.swing.JTextField fieldOfPhone;
     private javax.swing.JLabel fileLocation;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JButton submit1;
     private javax.swing.JFileChooser uploadImage;
     // End of variables declaration//GEN-END:variables

@@ -5,6 +5,7 @@
  */
 package flowershop;
 
+import Model.CustomerModel;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,8 +19,17 @@ public class CustomerForm extends javax.swing.JFrame {
     /**
      * Creates new form CreateFlower
      */
+    int id = 0;
     public CustomerForm() {
         initComponents();
+    }
+
+    CustomerForm(CustomerModel data) {
+        this.id = data.getId();
+        initComponents();
+        fieldOfName.setText(data.getName());
+        fieldOfEmail.setText(data.getEmail());
+        fieldOfPhone.setText(data.getPhone());        
     }
 
     /**
@@ -32,26 +42,27 @@ public class CustomerForm extends javax.swing.JFrame {
     private void initComponents() {
 
         uploadImage = new javax.swing.JFileChooser();
-        jTextField2 = new javax.swing.JTextField();
+        fieldOfEmail = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        fieldOfName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         back = new javax.swing.JButton();
         submit1 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        fieldOfPhone = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        fieldOfEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                fieldOfEmailActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel1.setText("Create a new Customer");
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Customer Form");
 
         jLabel3.setText("Name");
 
@@ -73,9 +84,9 @@ public class CustomerForm extends javax.swing.JFrame {
 
         jLabel6.setText("Phone Number");
 
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        fieldOfPhone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                fieldOfPhoneActionPerformed(evt);
             }
         });
 
@@ -96,12 +107,12 @@ public class CustomerForm extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel5)
-                                .addComponent(jLabel1)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
-                                .addComponent(jTextField1))
+                                .addComponent(fieldOfEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+                                .addComponent(fieldOfName))
                             .addComponent(jLabel6)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE))))
+                            .addComponent(fieldOfPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE))))
                 .addContainerGap(57, Short.MAX_VALUE))
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,15 +122,15 @@ public class CustomerForm extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldOfName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldOfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldOfPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(161, 161, 161)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -131,9 +142,9 @@ public class CustomerForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void fieldOfEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldOfEmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_fieldOfEmailActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         this.dispose();
@@ -145,17 +156,28 @@ public class CustomerForm extends javax.swing.JFrame {
     }//GEN-LAST:event_backActionPerformed
 
     private void submit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit1ActionPerformed
-        this.dispose();
-        try {
-            new Customers().setVisible(true);
+        try {                                        
+            CustomerModel data = new CustomerModel();
+            if (this.id == 0) {
+                data.create(fieldOfName.getText(), fieldOfEmail.getText(), fieldOfPhone.getText());
+            } else {
+                data.update(this.id, fieldOfName.getText(), fieldOfEmail.getText(), fieldOfPhone.getText());
+            }
+            
+            this.dispose();
+            try {
+                new Customers().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_submit1ActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void fieldOfPhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldOfPhoneActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_fieldOfPhoneActionPerformed
 
     /**
      * @param args the command line arguments
@@ -201,13 +223,13 @@ public class CustomerForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton back;
+    private javax.swing.JTextField fieldOfEmail;
+    private javax.swing.JTextField fieldOfName;
+    private javax.swing.JTextField fieldOfPhone;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JButton submit1;
     private javax.swing.JFileChooser uploadImage;
     // End of variables declaration//GEN-END:variables

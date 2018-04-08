@@ -107,8 +107,8 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="create" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="header" max="32767" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                      <Component id="header" min="-2" pref="912" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="jScrollPane1" min="-2" pref="627" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
@@ -164,7 +164,7 @@
         <Component class="javax.swing.JTable" name="jTable1">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    model.getFlowers(),&#xa;    new String [] {&#xa;        &quot;ID&quot;,&quot;Name&quot;,&quot;Type&quot;,&quot;Color&quot;,&quot;In Stock&quot;, &quot;Price&quot;&#xa;    }&#xa;)" type="code"/>
+              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    this.tableData,&#xa;    new String [] {&#xa;        &quot;ID&quot;,&quot;Name&quot;,&quot;Type&quot;,&quot;Color&quot;,&quot;In Stock&quot;, &quot;Price&quot;&#xa;    }&#xa;)" type="code"/>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0"/>
@@ -189,7 +189,7 @@
           <Font name="Dialog" size="36" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="Flowers"/>
+        <Property name="text" type="java.lang.String" value="Flowershop"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="viewBtn">

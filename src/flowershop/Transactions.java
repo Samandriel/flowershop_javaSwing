@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package flowershop;
-import Model.EmployeeModel;
 import Model.TransactionModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,6 +25,7 @@ public class Transactions extends javax.swing.JFrame {
     TransactionModel data;
     TransactionModel item;   
     public Transactions() throws SQLException {
+
         this.items  = new ArrayList<>();
         this.data = new TransactionModel();
         this.items = data.fetch();
@@ -37,7 +37,6 @@ public class Transactions extends javax.swing.JFrame {
             tableData[i][3] = this.items.get(i).getAmount();
             tableData[i][4] = this.items.get(i).getPrice();
         }
-       
         initComponents();
     }
 
@@ -152,7 +151,11 @@ public class Transactions extends javax.swing.JFrame {
 
     private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
         this.dispose();
-        new TransactionForm().setVisible(true);
+        try {
+            new TransactionForm().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Transactions.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_createActionPerformed
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
@@ -162,7 +165,11 @@ public class Transactions extends javax.swing.JFrame {
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         } else {
             this.dispose();
-            new TransactionForm().setVisible(true);
+            try {
+                new TransactionForm(this.items.get(row)).setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(Transactions.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_editBtnActionPerformed
 

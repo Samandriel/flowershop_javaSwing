@@ -6,12 +6,17 @@
 package flowershop;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import Model.FlowerTypeModel;
+import Model.FlowerNameModel;
+import Model.FlowerColorModel;
+import Model.FlowerModel;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -22,8 +27,90 @@ public class FlowerForm extends javax.swing.JFrame {
     /**
      * Creates new form CreateFlower
      */
-    public FlowerForm() {
+    int id;
+    
+    FlowerTypeModel flowerTypeData;
+    List<FlowerTypeModel> flowerTypes;
+    String fieldFlowerTypeObject[];
+    
+    FlowerNameModel flowerNameData;
+    List<FlowerNameModel> flowerNames;
+    String fieldFlowerNameObject[];
+    
+    FlowerColorModel flowerColorData;
+    List<FlowerColorModel> flowerColors;
+    String fieldFlowerColorObject[];    
+    public FlowerForm() throws SQLException {
+        this.flowerTypeData = new FlowerTypeModel();
+        this.flowerTypes = new ArrayList<>();
+        this.flowerTypes = this.flowerTypeData.fetch();
+        this.fieldFlowerTypeObject = new String[this.flowerTypeData.getCount()];
+        for (int i = 0; i < this.flowerTypeData.getCount(); i++) {
+            this.fieldFlowerTypeObject[i] = this.flowerTypes.get(i).getName();
+        }        
+
+        this.flowerNameData = new FlowerNameModel();
+        this.flowerNames = new ArrayList<>();
+        this.flowerNames = this.flowerNameData.fetch();        
+        this.fieldFlowerNameObject = new String[this.flowerNameData.getCount()];
+        for (int i = 0; i < this.flowerNameData.getCount(); i++) {
+            this.fieldFlowerNameObject[i] = this.flowerNames.get(i).getName();
+        }
+        
+        this.flowerColorData = new FlowerColorModel();
+        this.flowerColors = new ArrayList<>();
+        this.flowerColors = this.flowerColorData.fetch();
+        
+        this.fieldFlowerColorObject = new String[this.flowerColorData.getCount()];
+        for (int i = 0; i < this.flowerColorData.getCount(); i++) {
+            this.fieldFlowerColorObject[i] = this.flowerColors.get(i).getName();
+        }
+        
         initComponents();
+        fieldType.setModel(new DefaultComboBoxModel<>(this.fieldFlowerTypeObject));
+        fieldName.setModel(new DefaultComboBoxModel<>(this.fieldFlowerNameObject));
+        fieldColor.setModel(new DefaultComboBoxModel<>(this.fieldFlowerColorObject));
+    }
+
+    FlowerForm(FlowerModel data) throws SQLException {
+        this.id = data.getId();
+        this.flowerTypeData = new FlowerTypeModel();
+        this.flowerTypes = new ArrayList<>();
+        this.flowerTypes = this.flowerTypeData.fetch();
+        this.fieldFlowerTypeObject = new String[this.flowerTypeData.getCount()];
+        for (int i = 0; i < this.flowerTypeData.getCount(); i++) {
+            this.fieldFlowerTypeObject[i] = this.flowerTypes.get(i).getName();
+        }        
+
+        this.flowerNameData = new FlowerNameModel();
+        this.flowerNames = new ArrayList<>();
+        this.flowerNames = this.flowerNameData.fetch();        
+        this.fieldFlowerNameObject = new String[this.flowerNameData.getCount()];
+        for (int i = 0; i < this.flowerNameData.getCount(); i++) {
+            this.fieldFlowerNameObject[i] = this.flowerNames.get(i).getName();
+        }
+        
+        this.flowerColorData = new FlowerColorModel();
+        this.flowerColors = new ArrayList<>();
+        this.flowerColors = this.flowerColorData.fetch();
+        
+        this.fieldFlowerColorObject = new String[this.flowerColorData.getCount()];
+        for (int i = 0; i < this.flowerColorData.getCount(); i++) {
+            this.fieldFlowerColorObject[i] = this.flowerColors.get(i).getName();
+        }
+        
+        initComponents();
+        fieldType.setModel(new DefaultComboBoxModel<>(this.fieldFlowerTypeObject));
+        fieldType.insertItemAt(data.getType(), 0);
+        fieldType.setSelectedIndex(0);
+        fieldName.setModel(new DefaultComboBoxModel<>(this.fieldFlowerNameObject));
+        fieldName.insertItemAt(data.getName(), 0);
+        fieldName.setSelectedIndex(0);
+        fieldColor.setModel(new DefaultComboBoxModel<>(this.fieldFlowerColorObject));
+        fieldColor.insertItemAt(data.getColor(), 0);
+        fieldColor.setSelectedIndex(0);
+        fieldStock.setText(Integer.toString(data.getStock()));
+        fieldPrice.setText(Double.toString(data.getPrice()));
     }
 
     /**
@@ -36,42 +123,45 @@ public class FlowerForm extends javax.swing.JFrame {
     private void initComponents() {
 
         uploadImage = new javax.swing.JFileChooser();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        fieldPrice = new javax.swing.JTextField();
+        fieldImage = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        fieldType = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        fieldColor = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         fileLocation = new javax.swing.JLabel();
         back = new javax.swing.JButton();
         submit1 = new javax.swing.JButton();
+        fieldName = new javax.swing.JComboBox<>();
+        fieldStock = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        fieldPrice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                fieldPriceActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Upload Image");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        fieldImage.setText("Upload Image");
+        fieldImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                fieldImageActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel1.setText("Create a new Flower");
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Flower Form");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        fieldType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        fieldType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                fieldTypeActionPerformed(evt);
             }
         });
 
@@ -81,16 +171,14 @@ public class FlowerForm extends javax.swing.JFrame {
 
         jLabel4.setText("Color");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+        fieldColor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        fieldColor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+                fieldColorActionPerformed(evt);
             }
         });
 
         jLabel5.setText("Price");
-
-        fileLocation.setText("File location");
 
         back.setText("Back");
         back.addActionListener(new java.awt.event.ActionListener() {
@@ -106,34 +194,52 @@ public class FlowerForm extends javax.swing.JFrame {
             }
         });
 
+        fieldName.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        fieldName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldNameActionPerformed(evt);
+            }
+        });
+
+        fieldStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldStockActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Stock");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField1)
-                            .addComponent(jComboBox2, 0, 355, Short.MAX_VALUE)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(fileLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(fieldImage)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(130, 130, 130)
-                        .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(57, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel4)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(fieldType, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(fieldName, javax.swing.GroupLayout.Alignment.LEADING, 0, 355, Short.MAX_VALUE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(fileLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(fieldColor, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(fieldPrice, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(fieldStock, javax.swing.GroupLayout.Alignment.LEADING)))
+                        .addContainerGap(53, Short.MAX_VALUE))))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,39 +249,43 @@ public class FlowerForm extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(fieldImage)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fileLocation)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(submit1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addGap(47, 47, 47))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void fieldPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldPriceActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_fieldPriceActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void fieldImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldImageActionPerformed
         int returnVal = uploadImage.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = uploadImage.getSelectedFile();
@@ -184,15 +294,15 @@ public class FlowerForm extends javax.swing.JFrame {
         } else {
             System.out.println("File access cancelled by user.");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_fieldImageActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void fieldTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldTypeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_fieldTypeActionPerformed
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+    private void fieldColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldColorActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    }//GEN-LAST:event_fieldColorActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         this.dispose();
@@ -204,13 +314,62 @@ public class FlowerForm extends javax.swing.JFrame {
     }//GEN-LAST:event_backActionPerformed
 
     private void submit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit1ActionPerformed
-        this.dispose();
-        try {
-            new Flowers().setVisible(true);
+        try {                                        
+            int typeId = 0;
+            int nameId = 0;
+            int colorId = 0;
+            for (int i = 0; i < this.flowerTypes.size(); i++) {
+                if (this.flowerTypes.get(i).getName() == fieldType.getSelectedItem().toString()) {
+                    typeId = this.flowerTypes.get(i).getId();
+                    break;
+                }
+            }
+            
+            for (int i = 0; i < this.flowerNames.size(); i++) {
+                if (this.flowerNames.get(i).getName() == fieldName.getSelectedItem().toString()) {
+                    nameId = this.flowerNames.get(i).getId();
+                    break;
+                }
+            }
+            
+            for (int i = 0; i < this.flowerColors.size(); i++) {
+                if (this.flowerColors.get(i).getName() == fieldColor.getSelectedItem().toString()) {
+                    colorId = this.flowerColors.get(i).getId();
+                    break;
+                }
+            }
+            
+            System.out.println(typeId);
+            System.out.println(nameId);
+            System.out.println(colorId);
+            String rawPath = fileLocation.getText();
+            String[] splitPath = rawPath.split("\\\\");
+            String imagePath = String.join("/", splitPath);            
+            
+            FlowerModel data = new FlowerModel();
+            if (this.id == 0) {
+                data.create(typeId, nameId, colorId, Integer.parseInt(fieldStock.getText()), Double.parseDouble(fieldPrice.getText()), imagePath);
+            } else {
+                data.update(this.id, typeId, nameId, colorId, Integer.parseInt(fieldStock.getText()), Double.parseDouble(fieldPrice.getText()), imagePath);
+            }
+            this.dispose();
+            try {
+                new Flowers().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(FlowerForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(FlowerForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_submit1ActionPerformed
+
+    private void fieldNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldNameActionPerformed
+
+    private void fieldStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldStockActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldStockActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,24 +404,30 @@ public class FlowerForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FlowerForm().setVisible(true);
+                try {
+                    new FlowerForm().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FlowerForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton back;
+    private javax.swing.JComboBox<String> fieldColor;
+    private javax.swing.JButton fieldImage;
+    private javax.swing.JComboBox<String> fieldName;
+    private javax.swing.JTextField fieldPrice;
+    private javax.swing.JTextField fieldStock;
+    private javax.swing.JComboBox<String> fieldType;
     private javax.swing.JLabel fileLocation;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JButton submit1;
     private javax.swing.JFileChooser uploadImage;
     // End of variables declaration//GEN-END:variables

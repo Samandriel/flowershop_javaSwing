@@ -39,6 +39,8 @@ public class MainMenu extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAutoRequestFocus(false);
+        setBackground(new java.awt.Color(63, 64, 65));
         setSize(new java.awt.Dimension(800, 600));
 
         flowers.setText("Flowers");

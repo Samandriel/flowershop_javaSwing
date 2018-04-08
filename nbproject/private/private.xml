@@ -3,7 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/DEV/JAVA/INT4102/FlowerShop/src/flowershop/Flowers.java</file>
+            <file>file:/D:/DEV/JAVA/INT4102/FlowerShop/src/flowershop/FlowerForm.java</file>
+            <file>file:/D:/DEV/JAVA/INT4102/FlowerShop/src/flowershop/TransactionForm.java</file>
+            <file>file:/D:/DEV/JAVA/INT4102/FlowerShop/src/flowershop/CustomerForm.java</file>
+            <file>file:/D:/DEV/JAVA/INT4102/FlowerShop/src/flowershop/EmployeesForm.java</file>
         </group>
     </open-files>
 </project-private>

@@ -78,6 +78,7 @@ public final class EmployeeTransactionModel {
             
             this.dbData.next();
         }
+        c.close();
         return items;
     }
       
@@ -89,6 +90,7 @@ public final class EmployeeTransactionModel {
                 + "," + employeeId
                 + ");"
         );
+        c.close();
     }    
     
     public void update(int transactionId,int employeeId) throws SQLException {
@@ -98,10 +100,12 @@ public final class EmployeeTransactionModel {
                 + "employee_id=" + employeeId
                 + ";"
         );
+        c.close();
     }    
 
     public void delete(int id) throws SQLException {
         delete.executeUpdate("Delete from employee_transactions where id=" + id + ";");
+        c.close();
     }
 
 
