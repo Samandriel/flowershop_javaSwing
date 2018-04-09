@@ -20,10 +20,10 @@ public class FlowerShop {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 
-                JFrame menu = new MainMenu();
-                menu.pack();
-                menu.setLocationRelativeTo(null);
-                menu.setVisible(true);
+                JFrame page = new Register();
+                page.pack();
+                page.setLocationRelativeTo(null);
+                page.setVisible(true);
             }
         });
     }

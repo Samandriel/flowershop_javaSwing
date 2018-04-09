@@ -156,7 +156,6 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void usersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersActionPerformed
         this.dispose();
-        new Register().setVisible(true);
     }//GEN-LAST:event_usersActionPerformed
 
     /**

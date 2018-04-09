@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Model.FlowerModel;
+import Model.Session;
 /**
  *
  * @author harri
@@ -275,7 +276,7 @@ public class FlowerDetail extends javax.swing.JFrame {
             int inputAmount = Integer.parseInt(purchaseAmount.getText());
 
 //          int userId, int transactionTypeId, int mainFlowerId, int amount, double price
-            transaction.create(1, 1, id, inputAmount, price);
+            transaction.create(Session.getId(), 1, id, inputAmount, price);
             this.dispose();
             new Flowers().setVisible(true);
             

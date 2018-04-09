@@ -23,6 +23,7 @@ public final class CustomerModel {
     private String name;
     private String email;
     private String phone;
+    private String password;
     private int count;
     
     Database db = new Database();
@@ -40,11 +41,12 @@ public final class CustomerModel {
     public CustomerModel() throws SQLException {
     }
 
-    public CustomerModel(int id, String name, String email, String phone) {
+    public CustomerModel(int id, String name, String email, String phone, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.phone = phone;;
+        this.phone = phone;
+        this.password = password;
     }
 
     public int getId() {
@@ -79,6 +81,14 @@ public final class CustomerModel {
         this.phone = phone;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public int getCount() {
         return count;
     }
@@ -104,8 +114,9 @@ public final class CustomerModel {
             this.name = this.dbData.getString("name");
             this.email = this.dbData.getString("email");
             this.phone = this.dbData.getString("phone");
+            this.password = this.dbData.getString("password");
             
-            items.add(new CustomerModel(this.id, this.name, this.email, this.phone));
+            items.add(new CustomerModel(this.id, this.name, this.email, this.phone, this.password));
             
             this.dbData.next();
         }
@@ -126,12 +137,13 @@ public final class CustomerModel {
         return item;
     }    
     
-    public void create(String name, String email, String phone) throws SQLException {
+    public void create(String name, String email, String phone, String password) throws SQLException {
         this.q = c.createStatement();
-        String qString = "Insert into customers (name, email, phone) value('" 
+        String qString = "Insert into customers (name, email, phone, password) value('" 
                 + name
                 + "','" + email
                 + "','" + phone
+                + "','" + password
                 + "');";
         q.execute(qString);
         System.out.println(qString);
@@ -139,12 +151,13 @@ public final class CustomerModel {
         c.close();
     }    
     
-    public void update(int id, String name, String email, String phone) throws SQLException {
+    public void update(int id, String name, String email, String phone, String password) throws SQLException {
         this.q = c.createStatement();
         String qString =  "Update customers set" 
                 + " name='" + name
                 + "', email='" + email
                 + "', phone='" + phone
+                + "', password='" + password
                 + "' where id=" + id + ";";
         this.q.executeUpdate(qString);
         System.out.println(qString);

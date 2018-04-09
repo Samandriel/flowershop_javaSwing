@@ -230,7 +230,7 @@ public final class Seeder {
         if (tableEmpty("customers")) {
 //            Initalize Data
             List<CustomerModel> seeder = new ArrayList<>();
-            seeder.add(new CustomerModel(0, "'Gena'", "'customer1@email.com'", "'0987654321'"));
+            seeder.add(new CustomerModel(0, "'Gena'", "'customer1@email.com'", "'0987654321'", "123"));
      
 //            Initialize Query String
             String qString = "Insert into customers (id, name, email, phone) values";
